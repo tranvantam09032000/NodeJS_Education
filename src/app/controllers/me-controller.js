@@ -20,6 +20,12 @@ class MeController {
         .then(() =>res.redirect('/'))
         .catch((error)=> next(error));
     }
+
+    deleteCourse(req, res, next) {
+        Course.deleteOne({_id: req.params.id})
+        .then(() =>res.redirect('back'))
+        .catch((error)=> next(error));
+    }
 }
 
 module.exports = new MeController();

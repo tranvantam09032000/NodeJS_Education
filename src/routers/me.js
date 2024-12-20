@@ -5,6 +5,7 @@ const meController = require('../app/controllers/me-controller');
 
 router.get('/courses', meController.myCourse);
 router.put('/courses/:id/store', meController.updateCourse);
+router.delete('/courses/:id/delete', meController.deleteCourse);
 router.get('/courses/:id', meController.formUpdateCourse);
 
 module.exports = router;
