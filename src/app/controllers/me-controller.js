@@ -1,17 +1,24 @@
 const Course = require('../models/course-model');
-const {multipleMongooseToObject} = require('../../util/mongoose')
+const {mongooseToObject, multipleMongooseToObject} = require('../../util/mongoose')
+
 class MeController {
     myCourse(req, res, next) {
         Course.find({})
-            .then(courses =>
-                res.render("courses/my-courses", {courses: multipleMongooseToObject(courses)})
-            ).catch((error)=> {
-            next(error);
-        });
+            .then(courses =>res.render("courses/my-courses", {courses: multipleMongooseToObject(courses)}))
+            .catch((next));
     }
 
-    updateCourses(req, res, next) {
-        res.send("update")
+    formUpdateCourse(req, res, next) {
+        Course.findById(req.params.id)
+        .then(course =>res.render("courses/update", {course: mongooseToObject(course)}))
+        .catch((next));
+        
+    }
+
+    updateCourse(req, res, next) {
+        Course.updateOne({_id: req.params.id}, req.body)
+        .then(() =>res.redirect('/'))
+        .catch((error)=> next(error));
     }
 }
 

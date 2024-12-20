@@ -1,11 +1,10 @@
 const Course = require('../models/course-model');
-const {mongooseToObject, multipleMongooseToObject} = require('../../util/mongoose')
+const {mongooseToObject} = require('../../util/mongoose')
+
 class CoursesController {
     show(req, res, next) {
         Course.findOne({slug: req.params.slug})
-        .then((course) => {
-            return res.render("courses/show", {course: mongooseToObject(course)});
-        })
+        .then((course) => res.render("courses/show", {course: mongooseToObject(course)}))
         .catch(next);
     }
 
@@ -17,11 +16,8 @@ class CoursesController {
         const formData = req.body
         formData.image = `http://img.youtube.com/vi/${req.body.videoId}/0.jpg`;
         const course = new Course(formData);
-        course.save().then(()=> {
-            return res.redirect('/');
-        }).catch((error)=> {
-            next(error);
-        })
+        course.save().then(()=> res.redirect('/'))
+        .catch((next));
     }
 }
 
