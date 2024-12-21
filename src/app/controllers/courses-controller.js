@@ -13,10 +13,10 @@ class CoursesController {
     }
 
     create(req, res, next) {
-        const formData = req.body
+        const formData = {...req.body};
         formData.image = `http://img.youtube.com/vi/${req.body.videoId}/0.jpg`;
         const course = new Course(formData);
-        course.save().then(()=> res.redirect('/'))
+        course.save().then(()=> res.redirect('/me/courses'))
         .catch((next));
     }
 }

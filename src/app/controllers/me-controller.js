@@ -17,14 +17,33 @@ class MeController {
 
     updateCourse(req, res, next) {
         Course.updateOne({_id: req.params.id}, req.body)
-        .then(() =>res.redirect('/'))
+        .then(() =>res.redirect('/me/courses'))
         .catch((error)=> next(error));
     }
 
     deleteCourse(req, res, next) {
-        Course.deleteOne({_id: req.params.id})
+        Course.delete({_id: req.params.id})
         .then(() =>res.redirect('back'))
         .catch((error)=> next(error));
+    }
+
+    trashCourses(req, res, next) {
+        Course.findWithDeleted({deleted:true})
+            .then(courses =>
+                res.render("courses/trash-courses", {courses: multipleMongooseToObject(courses)}))
+            .catch((next));
+    }
+
+    restoreCourse(req, res, next) {
+        Course.restore({_id: req.params.id})
+            .then(() =>res.redirect('back'))
+            .catch((error)=> next(error));
+    }
+
+    destroyCourse(req, res, next) {
+        Course.deleteOne({_id: req.params.id})
+            .then(() =>res.redirect('back'))
+            .catch((error)=> next(error));
     }
 }
 
