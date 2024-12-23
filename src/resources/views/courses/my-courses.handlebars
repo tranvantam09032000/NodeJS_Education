@@ -1,11 +1,24 @@
-<div class="mt-3">
+<form method="POST" action="/me/handle-form-action" >
+  <div class="mt-3">
     <div>
         <h3>My Courses</h3>
         <a href="/me/trash/courses">Trash ({{count}})</a>
     </div>
+    <div class="mt-3 w-25 d-flex gap-2 align-items-center">
+       <select class="form-select" aria-label="Default select example">
+        <option selected>--Select action--</option>
+        <option value="1">One</option>
+      </select>
+      <button id="form-action-btn" type="submit" class="btn btn-primary" disabled>Submit</button>
+    </div>
     <table class="table mt-3">
         <thead>
         <tr>
+            <th scope="col">
+              <div class="form-check">
+                <input class="form-check-input checkbox-all-courses" type="checkbox">
+              </div>
+            </th>
             <th scope="col">#</th>
             <th scope="col">Name</th>
             <th scope="col">Description</th>
@@ -17,7 +30,12 @@
         <tbody>
         {{#each courses}}
         <tr>
-            <th scope="row">{{sum @index 1}}</th>
+            <td>
+              <div class="form-check">
+                <input class="form-check-input checkbox-item-course" type="checkbox" name="courseIds" value="{{this._id}}">
+              </div>
+            </td>
+            <td scope="row">{{sum @index 1}}</th>
             <td>{{this.name}}</td>
             <td>{{this.description}}</td>
             <td>{{this.level}}</td>
@@ -38,6 +56,7 @@
         </tbody>
     </table>
 </div>
+</form>
 
 
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -63,18 +82,38 @@
 <script>
     var idCourse;
     var deleteCourseForm = document.getElementById('delete-course-form');
+    var checkboxItemCourses = document.querySelectorAll('.checkbox-item-course');
+    var checkboxAllCourses = document.querySelectorAll('.checkbox-all-courses');
+    var formActionBtn = document.getElementById('form-action-btn');
 
     document.addEventListener("DOMContentLoaded", function(){
             var exampleModal = document.getElementById('exampleModal');
             exampleModal.addEventListener('show.bs.modal', function (event) {
             var button = event.relatedTarget;
             idCourse = button.getAttribute('data-id');
-        })
+        });
 
         var deleteCourseBtn = document.getElementById('delete-course-btn');
         deleteCourseBtn.addEventListener('click', function(){
            deleteCourseForm.action = `/me/courses/${idCourse}/delete?_method=DELETE`;
            deleteCourseForm.submit();
-        })
+        });
+
+        checkboxAllCourses.forEach((checkbox) => {
+            checkbox.addEventListener('change', function (e) {
+              formActionBtn.disabled = e.target.checked;
+              checkboxItemCourses.forEach(item=> {
+                item.checked = e.target.checked;
+              });
+            });
+        });
+
+        checkboxItemCourses.forEach(item=> {
+          item.addEventListener('change', function(e){
+            const isAllItem = document.querySelectorAll('input[name="courseIds"]:checked').length === checkboxItemCourses.length;
+            formActionBtn.disabled = !document.querySelectorAll('input[name="courseIds"]:checked').length;
+            checkboxAllCourses[0].checked =  isAllItem;
+          })
+        });
     })
 </script>
