@@ -3,6 +3,7 @@ const router = express.Router();
 
 const meController = require('../app/controllers/me-controller');
 
+router.post('/courses/handle-form-action', meController.handleFormAction);
 router.get('/courses', meController.myCourse);
 router.get('/trash/courses', meController.trashCourses);
 router.put('/courses/:id/store', meController.updateCourse);
