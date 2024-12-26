@@ -16,6 +16,16 @@ const Course = new Schema({
         timestamps: true
 });
 
+Course.query.sortStable= function(req) {
+    if(req.query.hasOwnProperty("_sort")) {
+        const invalidType = ["desc", "asc"].includes(req.query.type);
+        return this.sort({
+            [req.query.column]:  invalidType ? req.query.type : "desc"
+        })
+    }
+    return this;
+}
+
 mongoose.plugin(slug);
 Course.plugin(mongooseDelete, {
     deletedAt : true ,

@@ -24,32 +24,7 @@ app.use(sortMiddleware);
 app.engine('handlebars', handlebars.engine(
     {
         extname: "handlebars",
-        helpers: {
-            sum:(a, b)=> a + b,
-            sortable:(field, sort) => {
-                console.log(field, sort)
-                const sortType = field === sort.name ? sort.type : 'default';
-
-                const icons = {
-                    default: "chevron-expand-outline",
-                    asc: "caret-up-outline",
-                    desc: "caret-down-outline",
-                }
-
-                const types = {
-                    default: "desc",
-                    asc: "desc",
-                    desc: "asc",
-                }
-
-                const icon = icons[sortType];
-                const type = types[sortType]
-
-                return ` <a href="?_sort&column=${field}&type=${type}">
-                            <ion-icon name="${icon}"></ion-icon>
-                        </a>`
-            }
-        }
+        helpers: require('./helper/handlebars-helper')
     }
 ));
 

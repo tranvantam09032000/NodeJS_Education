@@ -1,6 +1,6 @@
 const { enable } = require("express/lib/application");
 
-module.exports = function(req, res, next) {
+module.exports = function sortMiddleware(req, res, next) {
 
     res.locals._sort = {
         enable: false,
