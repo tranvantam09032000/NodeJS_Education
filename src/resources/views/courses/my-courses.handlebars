@@ -22,13 +22,20 @@
             <th scope="col">#</th>
             <th scope="col">
               Name
-              <a href="">
-                  <ion-icon name="chevron-expand-outline"></ion-icon>
-              </a>
+              {{{sortable 'name' _sort}}}
             </th>
-            <th scope="col">Description</th>
-            <th scope="col">Level</th>
-            <th scope="col">Created at</th>
+            <th scope="col">
+              Description
+              {{{sortable 'description' _sort}}}
+              </th>
+            <th scope="col">
+              Level
+              {{{sortable 'level' _sort}}}
+            </th>
+            <th scope="col">
+              Created at
+              {{{sortable 'createdAt' _sort}}}
+              </th>
             <th scope="col">Action</th>
         </tr>
         </thead>
