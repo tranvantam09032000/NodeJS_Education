@@ -3,7 +3,6 @@ const handlebars = require('handlebars');
 module.exports = {
     sum:(a, b)=> a + b,
     sortable:(field, sort) => {
-        console.log(field, sort)
         const sortType = field === sort.name ? sort.type : 'default';
 
         const icons = {

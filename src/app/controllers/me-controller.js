@@ -2,18 +2,30 @@ const Course = require('../models/course-model');
 const {mongooseToObject, multipleMongooseToObject} = require('../../util/mongoose')
 
 class MeController {
-    myCourse(req, res, next) {
+    myCourses(req, res, next) {
         Promise.all([
             Course.find({}).sortStable(req), 
             Course.countDocumentsWithDeleted({deleted: true})
         ]).then(([courses, count]) =>
-            res.render("courses/my-courses", {courses: multipleMongooseToObject(courses), count: count}))
+            res.render("course/my-courses", {courses: multipleMongooseToObject(courses), count: count}))
+            .catch((next));
+    }
+
+    formCreate(req, res, next) {
+        res.render("course/create")
+    }
+
+    create(req, res, next) {
+        const formData = {...req.body};
+        formData.image = `http://img.youtube.com/vi/${req.body.videoId}/0.jpg`;
+        const course = new Course(formData);
+        course.save().then(()=> res.redirect('/me/courses'))
             .catch((next));
     }
 
     formUpdateCourse(req, res, next) {
         Course.findById(req.params.id)
-        .then(course =>res.render("courses/update", {course: mongooseToObject(course)}))
+        .then(course =>res.render("course/update", {course: mongooseToObject(course)}))
         .catch((next));
         
     }
@@ -33,7 +45,7 @@ class MeController {
     trashCourses(req, res, next) {
         Course.findWithDeleted({deleted:true})
             .then(courses =>
-                res.render("courses/trash-courses", {courses: multipleMongooseToObject(courses)}))
+                res.render("course/trash-courses", {courses: multipleMongooseToObject(courses)}))
             .catch((next));
     }
 
